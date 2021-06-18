@@ -1,0 +1,4 @@
+start FrameFillerTestBench
+add wave FrameFillerTestBench/*
+add wave FrameFillerTestBench/framefiller/*
+run 10000us

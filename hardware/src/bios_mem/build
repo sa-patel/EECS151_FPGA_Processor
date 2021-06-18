@@ -1,0 +1,11 @@
+#!/bin/bash
+
+coregen -b /dev/stdin <<EOM
+NEWPROJECT .
+SETPROJECT .
+EOM
+
+# Select the appropriate coregen command depending on whether the
+# bios151v3.coe initialization file is available or not.
+coregen -p . -b bios_mem_init.xco
+#coregen -p . -b bios_mem_noinit.xco

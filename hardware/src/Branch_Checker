@@ -1,0 +1,34 @@
+// UC Berkeley CS150
+// Lab 4, Fall 2014
+// Module: ALU.v
+// Desc:   32-bit ALU for the MIPS150 Processor
+// Inputs: 
+//    A: 32-bit value
+//    B: 32-bit value
+//    ALUop: Selects the ALU's operation 
+// 						
+// Outputs:
+//    Out: The chosen function mapped to A and B.
+
+`include "Opcode.vh"
+`include "ALUop.vh"
+
+module Branch_Checker(
+	input [31:0] A,B,
+	input [3:0] branch_op,
+	output reg [31:0] Out
+);
+
+	always@(*) begin
+		case(ALUop)  
+			`ALU_SLT:  Out = ($signed(A) < $signed(B));  
+			`ALU_SLTU: Out = (A < B);
+			`ALU_EQ: Out = (A == B);    
+			`ALU_NE: Out = (A != B);     
+			`ALU_GE:  Out = ($signed(A) >= $signed(B));   
+			`ALU_GEU: Out = (A >= B);   
+			default: Out = B;   
+		endcase
+end
+
+endmodule

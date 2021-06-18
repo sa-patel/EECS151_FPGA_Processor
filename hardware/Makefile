@@ -1,0 +1,48 @@
+# Uncomment the appropriate line to set the desired checkpoint
+# This variable customizes the compilation of the Verilog for each checkpoint
+# EECS151_CHKPNT := EECS151_CHKPNT_1
+# EECS151_CHKPNT := EECS151_CHKPNT_2
+EECS151_CHKPNT := EECS151_CHKPNT_3
+
+# Set the processor clock speed (in MHz) here.
+# Uncomment the appropriate line to set the desired speed.
+# These are the only 2 speeds supported.
+RISCV_CLK := RISCV_CLK_100
+ # RISCV_CLK := RISCV_CLK_50
+
+# Set a flag if checkpoint 2 or 3 is enabled. Do not change these lines.
+ifeq ($(EECS151_CHKPNT), EECS151_CHKPNT_2)
+    EECS151_CHKPNT += EECS151_CHKPNT_2_OR_3`
+endif
+ifeq ($(EECS151_CHKPNT), EECS151_CHKPNT_3)
+    EECS151_CHKPNT += EECS151_CHKPNT_2_OR_3
+endif
+
+# Set the project name and directories
+TOP := ml505top
+SRC := src
+TEMPLATES := cfg
+
+TARGETS = all synth xst map par timing bitgen impact report schematic schem ise
+
+BUILDDIR := build/$(TOP)
+SIMDIR   := sim
+MAKEFILE := $(BUILDDIR)/Makefile
+MAKEARGS := TOP=$(TOP) SRC=../../$(SRC) TEMPLATES=../../$(TEMPLATES) \
+            EECS151_CHKPNT="$(EECS151_CHKPNT)" RISCV_CLK=$(RISCV_CLK)
+
+$(TARGETS): $(MAKEFILE)
+	$(MAKE) $@ -C $(BUILDDIR) $(MAKEARGS)
+
+$(MAKEFILE): cfg/Makefile
+	mkdir -p build/$(TOP)
+	cp $< $@
+
+.PHONY: sim
+sim:
+	$(MAKE) -C $(SIMDIR) SIMDEFS="$(RISCV_CLK) $(EECS151_CHKPNT)"
+
+clean:
+	rm -rf build $(SIMDIR)/results $(SIMDIR)/build
+
+.PHONY := $(TARGETS) clean

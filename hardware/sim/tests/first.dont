@@ -1,0 +1,6 @@
+start FirstTest
+file copy -force ../../../software/sim_tests/asmtest.mif imem_blk_ram.mif
+file copy -force ../../../software/sim_tests/asmtest.mif dmem_blk_ram.mif
+add wave FirstTest/*
+add wave FirstTest/cpu/*
+run 10000us

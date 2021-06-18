@@ -1,0 +1,26 @@
+CSRCS := $(wildcard *.c)
+COBJS := $(CSRCS:%.c=%.c.o)
+
+SSRCS := $(wildcard *.s)
+SOBJS := $(SSRCS:%.s=%.s.o)
+
+LDSRC := $(TARGET).ld
+
+default: $(TARGET)
+
+$(TARGET): $(COBJS) $(SOBJS)
+	riscv-gcc -m32 -nostdlib -nostartfiles -T $(LDSRC) $^ -o $@.elf
+	riscv-strip -R .pdr -R .comment -R .reginfo $@.elf
+	riscv-objcopy -O binary $(TARGET).elf $(TARGET).bin
+	bin2mif-riscv < $(TARGET).bin > $(TARGET).mif
+	bin2coe-riscv < $(TARGET).bin > $(TARGET).coe
+	bin2rom-riscv $(TARGET) 0 < $(TARGET).bin > $(TARGET).v
+
+%.c.o: %.c
+	riscv-gcc -m32 -c $< -o $@ -std=c99
+
+%.s.o: %.s
+	riscv-as -m32 $< -o $@
+
+clean:
+	rm -f $(COBJS) $(SOBJS) $(TARGET).elf $(TARGET).{bin,mif,v,coe}

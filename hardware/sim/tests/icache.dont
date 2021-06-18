@@ -1,0 +1,11 @@
+start icache_testbench
+file copy -force ../../../software/icache/icache.mif bios_mem.mif
+add wave icache_testbench/*
+add wave icache_testbench/mem_arch/*
+add wave icache_testbench/mem_arch/dcache/*
+add wave icache_testbench/mem_arch/icache/*
+add wave icache_testbench/mem_arch/cache_bypass/*
+add wave icache_testbench/mem_arch/req_con/*
+add wave icache_testbench/DUT/*
+add wave icache_testbench/DUT/regfile/registers
+run 30000us

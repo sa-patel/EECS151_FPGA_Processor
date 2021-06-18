@@ -1,0 +1,7 @@
+start Memory151TestBench
+add wave Memory151TestBench/*
+add wave Memory151TestBench/mem_arch/*
+add wave Memory151TestBench/mem_arch/dcache/*
+add wave Memory151TestBench/mem_arch/icache/*
+add wave Memory151TestBench/mem_arch/req_con/*
+run -all
